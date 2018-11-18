@@ -1,0 +1,80 @@
+.main-window {
+    margin: 0 auto;
+    width: 50%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-data {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    justify-content: center;
+}
+
+.user-data input {
+    margin: 5px;
+}
+
+.chat-window {
+    margin: 0 auto;
+    width: 50%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+    justify-content: space-between;
+    align-items: center;
+    height: 600px;
+}
+
+.chat-body {
+    width: 90%;
+    display: flex;
+    border: 1px solid black;
+}
+.chat-body .active-users {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border: 1px solid black;
+    padding: 10px;
+    width: 20%;
+}
+
+.chat-body .messages-block {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    overflow-y: scroll;
+    width: 100%;
+    height: 300px;
+}
+
+.chat-body .messages-block {
+    margin-bottom: 5px;
+}
+
+.user-controll {
+    width: 90%;
+    height: 200px;
+}
+.user-controll .message-input{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+    height: 150px;
+}
+
+.user-controll .message-input textarea {
+    font-size: 14px;
+    resize: none;
+    position: relative;
+    height: 90%; 
+    border: 1px solid black;
+}
