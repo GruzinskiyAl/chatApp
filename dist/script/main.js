@@ -1,15 +1,5 @@
 const xhr = new XMLHttpRequest();
-
 const serverHost = "http://localhost:3000/"
-
-const regNick = document.getElementById("regNick");
-const regLogin = document.getElementById("regLogin");
-const regPassword = document.getElementById("regPassword");
-const regPasswordRepeat = document.getElementById("regPasswordRepeat");
-
-const regBtn = document.getElementById("regBtn");
-
-regBtn.onclick = registrationRequest;
 
 function passwordCompare(password, repeat) {
     if (password === repeat) return true;
@@ -32,6 +22,10 @@ function createUserObject(nick, login, password, repeatPassword) {
 
         return user;
     }
+}
+
+function loginRequest() {
+
 }
 
 function registrationRequest() {
