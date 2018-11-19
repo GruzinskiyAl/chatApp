@@ -1,13 +1,12 @@
 var gulp         = require('gulp');
 var browserSync  = require('browser-sync');
-var rigger       = require('rigger');
 
 
-gulp.task('watch', function() {
-    gulp.watch([
-        './dist/*.html'
-    ]).on('change', browserSync.reload);
-});
+// gulp.task('watch', function() {
+//     gulp.watch([
+//         './dist/*.html'
+//     ]).on('change', browserSync.reload);
+// });
 
 
 gulp.task('server',function(){
@@ -19,4 +18,4 @@ gulp.task('server',function(){
     })
 });
 
-gulp.task('default', ['watch', 'server']);
+gulp.task('default', ['server']);

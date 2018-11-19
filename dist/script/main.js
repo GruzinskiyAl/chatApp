@@ -1,6 +1,14 @@
 const xhr = new XMLHttpRequest();
 const serverHost = "http://localhost:3000/"
 
+let ws = null; 
+const wsHost = "ws://localhost:8080"
+
+function setActiveUser(responseData) {
+    let user = JSON.parse(responseData);
+    localStorage.setItem("nick", user.nick);
+}
+
 function passwordCompare(password, repeat) {
     if (password === repeat) return true;
     else return false;
@@ -10,22 +18,39 @@ function encryptPassword(password){
     return password
 }
 
-function createUserObject(nick, login, password, repeatPassword) {
+function createNewUserObject(nick, login, password, repeatPassword) {
     if (passwordCompare(password, repeatPassword)) {
         password = encryptPassword(password);
 
-        const user = {
-            nick,
-            login,
-            password
-        };
-
-        return user;
+        return {nick,
+                login,
+                password}
     }
 }
 
-function loginRequest() {
+function createUserObject(login, password) {
+    password = encryptPassword(password);
 
+    return {login,
+            password}
+}
+
+function loginRequest() {
+    xhr.open("POST", serverHost + "user/login/");
+    xhr.onreadystatechange = () => {
+        if ( xhr.readyState === 4 ){
+            console.log(xhr.response);
+
+            let user = getActiveUser(xhr.response)
+            setActiveUser(user);
+            redirectToChat();
+        }
+    };
+
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send( JSON.stringify(
+        createUserObject(authLogin.value, 
+                          authPassword.value)));
 }
 
 function registrationRequest() {
@@ -35,10 +60,15 @@ function registrationRequest() {
             console.log(xhr.status)
         }
     };
-    xhr.setRequestHeader("Content-Type", "application/json")
+
+    xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send( JSON.stringify(
-        createUserObject(regNick.value, 
-                         regLogin.value, 
-                         regPassword.value, 
-                         regPasswordRepeat.value)));
+        createNewUserObject(regNick.value, 
+                            regLogin.value, 
+                            regPassword.value, 
+                            regPasswordRepeat.value)));
+}
+
+function redirectToChat(){
+    window.location.replace("http://localhost:9000/chat.html");
 }

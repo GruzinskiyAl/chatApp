@@ -10,15 +10,9 @@
 <body>
     <div class="chat-window">
         <div class="chat-body">
-            <div class="active-users">
-                <div>Cold</div>
-                <div>Cold</div>
-                <div>Cold</div>
-                <div>Cold</div>
-                <div>Cold</div>
-                <div>Cold</div>
+            <div class="active-users" id="activeUsers">
             </div>
-            <div class="messages-block">
+            <div class="messages-block" id="messages">
                 <div class="message">
                     <span>Cold: </span><span>Message.........</span>
                 </div>
@@ -26,12 +20,14 @@
         </div>
         <div class="user-controll">
             <div class="message-input">
-                <textarea placeholder="Write..."></textarea>
+                <textarea id="messageTextArea" placeholder="Write..."></textarea>
             </div>
-            <button>Send message</button>
+            <button id="sendMessageBtn">Send message</button>
         </div>
     </div>
 
+
     <script src="./script/main.js"></script>
+    <script src="./script/chat.js"></script>
 </body>
 </html>
