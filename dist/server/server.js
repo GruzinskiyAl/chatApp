@@ -89,7 +89,18 @@ app.post('/user/registration/', (req, res) => {
 });
 
 server.on("connection", (ws) => {
-    ws.send("Hi");
+    ws.on("message", (user, message) => {
+        server.clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                let data = {
+                    user,
+                    message
+                }
+                console.log(data);
+                client.send(JSON.stringify(data))
+            }
+        })
+    })
 })
 
 

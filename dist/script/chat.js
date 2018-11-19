@@ -2,15 +2,26 @@ window.onload = () => {
     init();
 }
 function init(){
-    const activeUsersList = document.querySelector("#activeUsers");
-    const messages = document.querySelector("#messages");
-    const messageField = document.querySelector("#messageTextArea");
-    const sendMessageBtn = document.querySelector("#sendMessageBtn");
+    window.ws = null;
+    window.activeUsersList = document.querySelector("#activeUsers");
+    window.messages = document.querySelector("#messages");
+    window.messageField = document.querySelector("#messageTextArea");
+    window.sendMessageBtn = document.querySelector("#sendMessageBtn");
 
     startSession();
 }
 
-function getAciveUser(){
+sendMessageBtn.onclick = (e) => {
+    let text = messageField.value;
+    let user = getAciveUserNick();
+    new Promise((res, rej) => {
+        ws.send(user, text)
+    }).then ( ()=>{
+        messageField.value = "";
+    })
+}
+
+function getAciveUserNick(){
     return localStorage.getItem("nick");
 }
 
@@ -34,7 +45,18 @@ function printMessage(user, message) {
 
 function startSession() {
     ws = new WebSocket(wsHost);
-        ws.onopen = () => {
-            addActiveUser(user.nick);
-        }
+
+    ws.onopen = () => {
+        // ws.send(getAciveUserNick())
+        // addActiveUser(user)
+    }
+    ws.onclose = () => {}
+    
+    ws.onmessage = (response) => {
+        console.log(response);
+        let data = JSON.parse(response.data);
+        printMessage(data.user, data.message);
+    }
 }
+
+

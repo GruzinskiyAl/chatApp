@@ -41,8 +41,7 @@ function loginRequest() {
         if ( xhr.readyState === 4 ){
             console.log(xhr.response);
 
-            let user = getActiveUser(xhr.response)
-            setActiveUser(user);
+            setActiveUser(xhr.response)
             redirectToChat();
         }
     };
