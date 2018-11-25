@@ -6,5 +6,5 @@ authLoginBtn.onclick = loginRequest;
 
 const authRegistrationBtn = document.querySelector("#enterRegBtn");
 authRegistrationBtn.onclick = () => {
-    window.location.replace("http://localhost:9000/registration.html")
+    window.location.replace("./registration.html")
 }

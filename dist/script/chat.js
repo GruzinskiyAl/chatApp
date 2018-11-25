@@ -3,6 +3,7 @@ window.onload = () => {
 }
 function init(){
     window.ws = null;
+    window.userId = null;
     window.activeUsersList = document.querySelector("#activeUsers");
     window.messages = document.querySelector("#messages");
     window.messageField = document.querySelector("#messageTextArea");
@@ -11,24 +12,43 @@ function init(){
     startSession();
 }
 
-sendMessageBtn.onclick = (e) => {
+sendMessageBtn.onclick = () => {
     let text = messageField.value;
-    let user = getAciveUserNick();
-    new Promise((res, rej) => {
-        ws.send(user, text)
-    }).then ( ()=>{
-        messageField.value = "";
-    })
+    
+    if (text){
+        let mesObj = {
+            header: {
+                "action": "chatMessage"
+            },
+            body: {
+                "message": text
+            }
+        };
+        ws.send(JSON.stringify(mesObj));
+    }
+    messageField.value = "";
 }
 
-function getAciveUserNick(){
-    return localStorage.getItem("nick");
+function pullAciveUserNick(){
+    let userNick = localStorage.getItem("nick");
+    localStorage.removeItem("nick")
+    return userNick
 }
 
-function addActiveUser(userNick) {
-    let div = document.createElement("DIV");
-    div.innerText = userNick;
-    activeUsersList.appendChild(div);
+function clearActiveUsers() {
+    while (activeUsersList.firstChild) {
+        activeUsersList.removeChild(activeUsersList.firstChild);
+    }
+}
+
+function renderActiveUsers(usersList) {
+    clearActiveUsers(); // rerender users list block
+
+    usersList.forEach(userNick => {
+        let div = document.createElement("DIV");
+        div.innerText = userNick;
+        activeUsersList.appendChild(div)
+    });
 }
 
 function printMessage(user, message) {
@@ -46,16 +66,34 @@ function printMessage(user, message) {
 function startSession() {
     ws = new WebSocket(wsHost);
 
-    ws.onopen = () => {
-        // ws.send(getAciveUserNick())
-        // addActiveUser(user)
+    ws.onopen = () => { // send own protocol data obj with userNick value
+        let data = {};
+        data.header = {"action": "userConnection"};
+        data.body = {"user": pullAciveUserNick()}
+        ws.send(JSON.stringify(data))
+    };
+
+    ws.onclose = () => { //
+        let data = {};
+        data.header = {"action": "userDisconnection"};
+        ws.send(JSON.stringify(data))
     }
-    ws.onclose = () => {}
     
-    ws.onmessage = (response) => {
-        console.log(response);
-        let data = JSON.parse(response.data);
-        printMessage(data.user, data.message);
+    ws.onmessage = (responseData) => {
+        let data = JSON.parse(responseData.data);
+        console.log(data);
+
+        if (data.header.action === "userConnection") {
+            renderActiveUsers(data.body.users)
+        }
+
+        if (data.header.action === "userDisconnection") {
+            renderActiveUsers(data.body.users)
+        }
+
+        if (data.header.action === "chatMessage") {
+            printMessage(data.body.user, data.body.message)
+        }
     }
 }
 

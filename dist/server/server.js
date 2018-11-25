@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 
 const WebSocket = require("ws");
 const server = new WebSocket.Server({port: 8080})
-
+const CLIENTS=[];
 
 const MongoClient = require("mongodb").MongoClient;
 let db = null;
@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:9000');
+    res.setHeader('Access-Control-Allow-Origin', '*');
 
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -89,20 +89,73 @@ app.post('/user/registration/', (req, res) => {
 });
 
 server.on("connection", (ws) => {
-    ws.on("message", (user, message) => {
-        server.clients.forEach((client) => {
-            if (client.readyState === WebSocket.OPEN) {
-                let data = {
-                    user,
-                    message
+    CLIENTS.push(ws);
+
+    ws.on("message", (dataJSON) => {
+        let data = JSON.parse(dataJSON);
+
+        if (data.header.action === "userConnection") {
+            let userNick = data.body.user;
+            ws.userNick = userNick;
+
+            let responseObject = {
+                "header": {
+                    "action":"userConnection"
+                },
+                "body": {
+                    "users": getActiveUsers()
                 }
-                console.log(data);
-                client.send(JSON.stringify(data))
-            }
-        })
-    })
+            };
+            sendAll(responseObject);
+        }
+
+        if (data.header.action === "chatMessage") {
+            let responseObject = {
+                "header": {
+                    "action": "chatMessage"
+                },
+                "body":{
+                    "user": ws.userNick,
+                    "message": data.body.message
+                }
+            };
+            sendAll(responseObject);
+        }
+
+        if (data.header.action === "userDisconnection") {
+            dropUserFromClients(ws); // drop user on web socket ds
+
+            let responseObject = {
+                "header": {
+                    "action":"userDisconnection"
+                },
+                "body": {
+                    "users": getActiveUsers()
+                }
+            };
+            sendAll(responseObject);
+        }
+    });
 })
 
+function dropUserFromClients(client) {
+    let index = CLIENTS.indexOf(client);
+    if (index !== -1) CLIENTS.splice(index, 1);
+}
+
+function getActiveUsers() {
+    return CLIENTS.map((ws) => {
+        return ws.userNick
+    })
+}
+
+function sendAll (responseObject) {
+    for (let i=0; i<CLIENTS.length; i++) {
+        if (CLIENTS[i].readyState === WebSocket.OPEN){
+            CLIENTS[i].send(JSON.stringify(responseObject));
+        }
+    }
+}
 
 
 MongoClient.connect("mongodb://localhost:27017/", (err, database) => {

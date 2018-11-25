@@ -69,5 +69,5 @@ function registrationRequest() {
 }
 
 function redirectToChat(){
-    window.location.replace("http://localhost:9000/chat.html");
+    window.location.replace("./chat.html");
 }
