@@ -40,16 +40,15 @@ app.post('/user/login/', (req, res) => {
     db.collection("users").findOne({login: login ,password: password}, (err, doc) => {
 
         if (err) {
+            console.log(err);
             res.status = 500;
             return res.send(err);
         } else {
-
-            if (doc){
-                res.status = 200;
-                return res.send({"nick": doc.nick});
+            console.log(doc);
+            if (doc) {
+                return res.status(200).send({"nick": doc.nick});
             } else {
-                res.status = 400;
-                return res.send("Check your login or password!")
+                return res.status(400).send({1:2})
             }
         }
     })

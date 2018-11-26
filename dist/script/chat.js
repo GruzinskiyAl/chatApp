@@ -9,7 +9,19 @@ function init(){
     window.messageField = document.querySelector("#messageTextArea");
     window.sendMessageBtn = document.querySelector("#sendMessageBtn");
 
+    window.exitBtn = document.querySelector("#exitBtn");
+
     startSession();
+}
+
+exitBtn.onclick = () => {
+    ws.send(JSON.stringify({
+        "header": {
+            "action": "userDisconnection"
+        }
+    }));
+
+    window.location.replace("./index.html")
 }
 
 sendMessageBtn.onclick = () => {
@@ -46,6 +58,7 @@ function renderActiveUsers(usersList) {
 
     usersList.forEach(userNick => {
         let div = document.createElement("DIV");
+        div.className = "active-user";
         div.innerText = userNick;
         activeUsersList.appendChild(div)
     });
@@ -55,8 +68,9 @@ function printMessage(user, message) {
     let div = document.createElement("div")
     div.className = "message";
     let spanName = document.createElement("SPAN");
+    spanName.className = "message-author";
     let spanMessage = document.createElement("SPAN");
-    spanName.innerText = user;
+    spanName.innerText = user + ":";
     spanMessage.innerText = message;
     div.appendChild(spanName);
     div.appendChild(spanMessage);

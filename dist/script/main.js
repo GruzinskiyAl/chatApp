@@ -1,4 +1,3 @@
-const xhr = new XMLHttpRequest();
 const serverHost = "http://localhost:3000/"
 
 let ws = null; 
@@ -22,50 +21,76 @@ function createNewUserObject(nick, login, password, repeatPassword) {
     if (passwordCompare(password, repeatPassword)) {
         password = encryptPassword(password);
 
-        return {nick,
-                login,
-                password}
+        let user = {nick,
+                    login,
+                    password}
+        return user
     }
 }
 
 function createUserObject(login, password) {
     password = encryptPassword(password);
 
-    return {login,
-            password}
+    if (login && password) {
+        return {login, 
+                password}
+    }
 }
 
 function loginRequest() {
-    xhr.open("POST", serverHost + "user/login/");
-    xhr.onreadystatechange = () => {
-        if ( xhr.readyState === 4 ){
-            console.log(xhr.response);
+    const xhr = new XMLHttpRequest();
 
-            setActiveUser(xhr.response)
-            redirectToChat();
-        }
-    };
-
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send( JSON.stringify(
-        createUserObject(authLogin.value, 
-                          authPassword.value)));
+    let user = createUserObject(authLogin.value, authPassword.value);
+    if (user) {
+        xhr.open("POST", serverHost + "user/login/");
+        xhr.setRequestHeader("Content-Type", "application/json");
+    
+    
+        xhr.send( JSON.stringify(user))
+    
+        xhr.onreadystatechange = () => {
+            if ( xhr.readyState === 4 ){
+                console.log(xhr);
+                if (xhr.status === 200) {
+                    setActiveUser(xhr.response)
+                    redirectToChat();
+                } else {
+                    alert("Check your creditians!")
+                }
+            }
+        };
+    } else {
+        alert("Empty fields exist!");
+    }
+ 
 }
 
 function registrationRequest() {
-    xhr.open("POST", serverHost + "user/registration/");
-    xhr.onreadystatechange = () => {
-        if ( xhr.readyState === 4 ) {
-            console.log(xhr.status)
-        }
-    };
-
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send( JSON.stringify(
-        createNewUserObject(regNick.value, 
-                            regLogin.value, 
-                            regPassword.value, 
-                            regPasswordRepeat.value)));
+    const xhr = new XMLHttpRequest();
+    
+    let user = createNewUserObject(regNick.value, 
+                                   regLogin.value, 
+                                   regPassword.value, 
+                                   regPasswordRepeat.value)
+    if (user) {
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send( JSON.stringify(
+            createNewUserObject(regNick.value, 
+                                regLogin.value, 
+                                regPassword.value, 
+                                regPasswordRepeat.value)));
+    
+        xhr.open("POST", serverHost + "user/registration/");
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 201) {
+                    window.location.replace("./index.html");
+                }
+            }
+        };
+    } else {
+        
+    }
 }
 
 function redirectToChat(){

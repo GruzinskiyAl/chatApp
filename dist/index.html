@@ -5,18 +5,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="screen" href="./style/main.css" />
 </head>
 <body>
-    <div class="main-window">
+    <div class="container main-window">
         <h1>Hi!</h1>
+
         <div class="user-data">
-            <input type=text id="enterLogin" placeholder="Login">
-            <input type=password id="enterPassword" placeholder="Password">
-        </div>
-        <div class="controll">
-            <button id="enterLoginBtn">Login</button>
-            <button id="enterRegBtn">Registration</button>
+            <div class="form-group">
+                <input type="text" class="form-control" id="enterLogin" aria-describedby="emailHelp" placeholder="Enter login">
+            </div>
+            
+            <div class="form-group">
+                <input type="password" class="form-control" id="enterPassword" placeholder="Enter password">
+            </div>
+    
+            <div class="controll">
+                <button id="enterLoginBtn" class="btn btn-outline-primary chat-btn">Login</button>
+                <button id="enterRegBtn" class="btn btn-outline-primary chat-btn">Registration</button>
+            </div>
         </div>
     </div>
     

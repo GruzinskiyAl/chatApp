@@ -1,10 +1,24 @@
+body {
+    background-color: #ccffd7;
+}
+
+.chat-btn {
+    border-color: #009d23;
+    color: #009d23;
+}
+
+.chat-btn:hover {
+    border-color: #fff;
+    background-color: #009d23;
+}
+
 .main-window {
+    background-color: #fff;
     margin: 0 auto;
     width: 50%;
     padding: 10px;
     display: flex;
     flex-direction: column;
-    border: 1px solid black;
     justify-content: center;
     align-items: center;
 }
@@ -20,61 +34,100 @@
     margin: 5px;
 }
 
+.user-data .controll {
+    display: flex;
+    justify-content: space-around
+}
+
 .chat-window {
+    background-color: #fff;
     margin: 0 auto;
     width: 50%;
     padding: 10px;
     display: flex;
-    flex-direction: column;
-    border: 1px solid black;
     justify-content: space-between;
-    align-items: center;
+    align-items: stretch;
     height: 600px;
+    border: 1px solid #009d23;
 }
 
 .chat-body {
     width: 90%;
     display: flex;
-    border: 1px solid black;
+    flex-direction: column;
+    background-color: #fff;
 }
-.chat-body .active-users {
+.side-bar {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    border: 1px solid black;
-    padding: 10px;
-    width: 20%;
+    background-color: #ccffd7;
+    width: 30%;
+}
+
+
+.side-bar .side-header h5{
+    background-color: #fff;
+    color: #009d23;
+}
+
+.side-bar .active-users {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    height: 100%;
+    overflow: auto
+}
+
+.side-bar .active-users .active-user {
+    margin-top: 3px;
+    width: 100%;
+    height: 30px;
+    background-color: #fff;
+    text-align: center;
+    border: 1px solid black
+}
+
+.side-bar .side-footer {
+    background-color: #fff;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.chat-body {
+    margin-left: 10px;
 }
 
 .chat-body .messages-block {
+    background-color: #ccffd7;
     display: flex;
     flex-direction: column;
     padding: 5px;
     overflow-y: scroll;
     width: 100%;
-    height: 300px;
+    height: 80%;
 }
 
 .chat-body .messages-block {
     margin-bottom: 5px;
 }
 
-.user-controll {
-    width: 90%;
-    height: 200px;
-}
-.user-controll .message-input{
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    width: 100%;
-    height: 150px;
+.chat-body .message .message-author {
+    margin-right: 20px;
 }
 
+.user-controll {
+    display: flex;
+    flex-direction: column;
+}
 .user-controll .message-input textarea {
     font-size: 14px;
     resize: none;
-    position: relative;
-    height: 90%; 
-    border: 1px solid black;
+}
+
+.user-controll .message-controll {
+    display: flex;
+    justify-content: flex-end;
 }
